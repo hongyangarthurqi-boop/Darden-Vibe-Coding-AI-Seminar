@@ -1,9 +1,9 @@
 diff --git a/index.html b/index.html
 new file mode 100644
-index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fcaad6aa806
+index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d56fee65aa
 --- /dev/null
 +++ b/index.html
-@@ -0,0 +1,503 @@
+@@ -0,0 +1,808 @@
 +<!DOCTYPE html>
 +<html lang="en">
 +<head>
@@ -18,10 +18,14 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +      --ink: #0f172a;
 +      --muted: #5b6478;
 +      --accent: #2563eb;
++      --accent-strong: #1d4ed8;
 +      --accent-soft: #e0eaff;
++      --accent-muted: rgba(37, 99, 235, 0.12);
 +      --success: #16a34a;
 +      --warning: #d97706;
 +      --danger: #dc2626;
++      --purple: #7c3aed;
++      --teal: #0f766e;
 +      --border: #e2e8f0;
 +      font-family: "Inter", system-ui, -apple-system, sans-serif;
 +    }
@@ -47,6 +51,10 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +      flex-direction: column;
 +      gap: 12px;
 +      margin-bottom: 24px;
++      padding: 24px;
++      border-radius: 20px;
++      background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(124, 58, 237, 0.12));
++      border: 1px solid rgba(37, 99, 235, 0.2);
 +    }
 +
 +    header h1 {
@@ -136,6 +144,54 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +      grid-template-columns: 2.2fr 1fr;
 +      gap: 16px;
 +      margin-top: 16px;
++    }
++
++    .filters {
++      display: grid;
++      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
++      gap: 12px;
++      margin: 16px 0 8px;
++    }
++
++    .filter-card {
++      background: var(--card);
++      border: 1px solid var(--border);
++      border-radius: 14px;
++      padding: 12px;
++      display: grid;
++      gap: 6px;
++    }
++
++    .filter-card label {
++      font-size: 12px;
++      color: var(--muted);
++      font-weight: 600;
++      text-transform: uppercase;
++      letter-spacing: 0.03em;
++    }
++
++    .filter-card select {
++      width: 100%;
++      border: 1px solid var(--border);
++      border-radius: 10px;
++      padding: 8px 10px;
++      font-size: 13px;
++      background: #fff;
++    }
++
++    .filter-note {
++      font-size: 12px;
++      color: var(--muted);
++    }
++
++    .filter-summary {
++      font-size: 12px;
++      color: var(--muted);
++      margin-top: 8px;
++    }
++
++    .filter-summary strong {
++      color: var(--ink);
 +    }
 +
 +    .section-title {
@@ -231,6 +287,81 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +      color: var(--muted);
 +    }
 +
++    .chart {
++      display: grid;
++      gap: 12px;
++    }
++
++    .chart-row {
++      display: grid;
++      grid-template-columns: 140px 1fr 40px;
++      gap: 12px;
++      align-items: center;
++    }
++
++    .chart-label {
++      font-size: 13px;
++      color: var(--muted);
++    }
++
++    .chart-bar {
++      height: 10px;
++      background: #eef2ff;
++      border-radius: 999px;
++      overflow: hidden;
++    }
++
++    .chart-bar span {
++      display: block;
++      height: 100%;
++      border-radius: 999px;
++      background: linear-gradient(90deg, var(--accent), var(--purple));
++    }
++
++    .chart-value {
++      font-size: 12px;
++      color: var(--muted);
++      text-align: right;
++    }
++
++    .sparkline {
++      display: grid;
++      grid-template-columns: repeat(12, 1fr);
++      gap: 6px;
++      align-items: end;
++      height: 120px;
++      margin-top: 8px;
++    }
++
++    .sparkline span {
++      display: block;
++      width: 100%;
++      background: linear-gradient(180deg, rgba(37, 99, 235, 0.8), rgba(37, 99, 235, 0.2));
++      border-radius: 6px 6px 2px 2px;
++    }
++
++    .legend {
++      display: flex;
++      flex-wrap: wrap;
++      gap: 12px;
++      margin-top: 8px;
++      font-size: 12px;
++      color: var(--muted);
++    }
++
++    .legend span {
++      display: inline-flex;
++      align-items: center;
++      gap: 6px;
++    }
++
++    .legend i {
++      width: 10px;
++      height: 10px;
++      border-radius: 50%;
++      display: inline-block;
++    }
++
 +    footer {
 +      margin-top: 24px;
 +      color: var(--muted);
@@ -257,8 +388,64 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +        <span class="pill">Reporting Period: Q3 2024</span>
 +        <span class="pill">Prepared by: Governance Office</span>
 +        <span class="pill">Board Packet v0.3</span>
++        <span class="pill">Live Filters Enabled</span>
 +      </div>
 +    </header>
++
++    <section class="card">
++      <div class="section-title">
++        <h2>Interactive Filters</h2>
++        <span>Apply to risk register, policy coverage, and milestones</span>
++      </div>
++      <div class="filters">
++        <div class="filter-card">
++          <label for="severityFilter">Severity</label>
++          <select id="severityFilter">
++            <option value="all">All severities</option>
++            <option value="high">High</option>
++            <option value="medium">Medium</option>
++            <option value="low">Low</option>
++          </select>
++        </div>
++        <div class="filter-card">
++          <label for="ownerFilter">Owner</label>
++          <select id="ownerFilter">
++            <option value="all">All owners</option>
++            <option value="Safety">Safety</option>
++            <option value="Legal">Legal</option>
++            <option value="Infrastructure">Infrastructure</option>
++            <option value="Security">Security</option>
++            <option value="Alignment">Alignment</option>
++            <option value="Finance">Finance</option>
++            <option value="Privacy Office">Privacy Office</option>
++            <option value="Procurement">Procurement</option>
++          </select>
++        </div>
++        <div class="filter-card">
++          <label for="windowFilter">Time Window</label>
++          <select id="windowFilter">
++            <option value="all">All</option>
++            <option value="30">Next 30 days</option>
++            <option value="60">Next 60 days</option>
++            <option value="90">Next 90 days</option>
++          </select>
++        </div>
++        <div class="filter-card">
++          <label for="statusFilter">Status</label>
++          <select id="statusFilter">
++            <option value="all">All statuses</option>
++            <option value="approved">Approved</option>
++            <option value="review">Revisions due</option>
++            <option value="audit">Audit findings</option>
++            <option value="overdue">Overdue</option>
++          </select>
++        </div>
++      </div>
++      <p class="filter-note">
++        Filters are applied client-side and update the tables and milestone list instantly.
++      </p>
++      <div id="filterSummary" class="filter-summary">Showing <strong>all</strong> items.</div>
++    </section>
 +
 +    <section class="grid">
 +      <div class="card">
@@ -300,7 +487,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +            </tr>
 +          </thead>
 +          <tbody>
-+            <tr>
++            <tr data-owner="Safety" data-severity="medium">
 +              <td>Frontier model misuse</td>
 +              <td>Safety</td>
 +              <td>Medium</td>
@@ -309,7 +496,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +                <div class="risk-bar"><span style="width: 62%"></span></div>
 +              </td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Legal" data-severity="high">
 +              <td>Regulatory divergence (EU/US)</td>
 +              <td>Legal</td>
 +              <td>High</td>
@@ -318,7 +505,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +                <div class="risk-bar"><span style="width: 78%"></span></div>
 +              </td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Infrastructure" data-severity="medium">
 +              <td>Compute supply constraints</td>
 +              <td>Infrastructure</td>
 +              <td>Medium</td>
@@ -327,7 +514,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +                <div class="risk-bar"><span style="width: 48%"></span></div>
 +              </td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Security" data-severity="low">
 +              <td>Data governance gaps</td>
 +              <td>Security</td>
 +              <td>Low</td>
@@ -336,7 +523,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +                <div class="risk-bar"><span style="width: 36%"></span></div>
 +              </td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Alignment" data-severity="medium">
 +              <td>Model eval coverage</td>
 +              <td>Alignment</td>
 +              <td>Medium</td>
@@ -345,7 +532,7 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +                <div class="risk-bar"><span style="width: 54%"></span></div>
 +              </td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Finance" data-severity="low">
 +              <td>Vendor concentration</td>
 +              <td>Finance</td>
 +              <td>Low</td>
@@ -412,31 +599,31 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +            </tr>
 +          </thead>
 +          <tbody>
-+            <tr>
++            <tr data-owner="Safety Council" data-status="approved">
 +              <td>Model Release Governance</td>
 +              <td>Jul 15, 2024</td>
 +              <td>Safety Council</td>
 +              <td><span class="status success">Approved</span></td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Privacy Office" data-status="review">
 +              <td>Data Use & Retention</td>
 +              <td>Jun 30, 2024</td>
 +              <td>Privacy Office</td>
 +              <td><span class="status warning">Revisions due</span></td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Security" data-status="approved">
 +              <td>Red-Team Operations</td>
 +              <td>May 12, 2024</td>
 +              <td>Security</td>
 +              <td><span class="status success">Approved</span></td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Procurement" data-status="audit">
 +              <td>Third-Party Risk Management</td>
 +              <td>Apr 18, 2024</td>
 +              <td>Procurement</td>
 +              <td><span class="status warning">Audit findings</span></td>
 +            </tr>
-+            <tr>
++            <tr data-owner="Legal" data-status="overdue">
 +              <td>Incident Disclosure</td>
 +              <td>Mar 03, 2024</td>
 +              <td>Legal</td>
@@ -451,22 +638,82 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +          <h2>Upcoming Governance Milestones</h2>
 +          <span>Next 30 days</span>
 +        </div>
-+        <div class="timeline">
-+          <div class="timeline-item">
++        <div class="timeline" id="milestoneList">
++          <div class="timeline-item" data-window="30">
 +            <h4>Safety Board Review: Model Atlas v2</h4>
 +            <p>Aug 05 · Decision on phased deployment readiness</p>
 +          </div>
-+          <div class="timeline-item">
++          <div class="timeline-item" data-window="30">
 +            <h4>External Audit Closeout</h4>
 +            <p>Aug 12 · SOC 2 remediation evidence submission</p>
 +          </div>
-+          <div class="timeline-item">
++          <div class="timeline-item" data-window="60">
 +            <h4>Governance Charter Refresh</h4>
 +            <p>Aug 20 · Committee scope update & vote</p>
 +          </div>
-+          <div class="timeline-item">
++          <div class="timeline-item" data-window="90">
 +            <h4>Policy Review Sprint</h4>
 +            <p>Aug 28 · Cross-functional review of data governance</p>
++          </div>
++        </div>
++      </div>
++    </section>
++
++    <section class="layout">
++      <div class="card">
++        <div class="section-title">
++          <h2>Risk Exposure Trend</h2>
++          <span>Monthly weighted risk score (mock)</span>
++        </div>
++        <div class="sparkline" aria-label="Risk trend chart">
++          <span style="height: 40%"></span>
++          <span style="height: 55%"></span>
++          <span style="height: 48%"></span>
++          <span style="height: 62%"></span>
++          <span style="height: 70%"></span>
++          <span style="height: 60%"></span>
++          <span style="height: 72%"></span>
++          <span style="height: 68%"></span>
++          <span style="height: 58%"></span>
++          <span style="height: 64%"></span>
++          <span style="height: 75%"></span>
++          <span style="height: 69%"></span>
++        </div>
++        <div class="legend">
++          <span><i style="background: var(--accent);"></i> Current quarter</span>
++          <span><i style="background: var(--accent-muted);"></i> Prior quarter range</span>
++        </div>
++      </div>
++      <div class="card">
++        <div class="section-title">
++          <h2>Compliance Coverage</h2>
++          <span>Controls by domain</span>
++        </div>
++        <div class="chart">
++          <div class="chart-row">
++            <div class="chart-label">Model Safety</div>
++            <div class="chart-bar"><span style="width: 82%"></span></div>
++            <div class="chart-value">82%</div>
++          </div>
++          <div class="chart-row">
++            <div class="chart-label">Data Governance</div>
++            <div class="chart-bar"><span style="width: 74%"></span></div>
++            <div class="chart-value">74%</div>
++          </div>
++          <div class="chart-row">
++            <div class="chart-label">Privacy Controls</div>
++            <div class="chart-bar"><span style="width: 68%"></span></div>
++            <div class="chart-value">68%</div>
++          </div>
++          <div class="chart-row">
++            <div class="chart-label">Vendor Risk</div>
++            <div class="chart-bar"><span style="width: 61%"></span></div>
++            <div class="chart-value">61%</div>
++          </div>
++          <div class="chart-row">
++            <div class="chart-label">Incident Readiness</div>
++            <div class="chart-bar"><span style="width: 87%"></span></div>
++            <div class="chart-value">87%</div>
 +          </div>
 +        </div>
 +      </div>
@@ -505,5 +752,63 @@ index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fca
 +      Draft dashboard. All data is synthetic and for demonstration only.
 +    </footer>
 +  </div>
++
++  <script>
++    const severityFilter = document.getElementById("severityFilter");
++    const ownerFilter = document.getElementById("ownerFilter");
++    const windowFilter = document.getElementById("windowFilter");
++    const statusFilter = document.getElementById("statusFilter");
++    const filterSummary = document.getElementById("filterSummary");
++
++    const applyFilters = () => {
++      const severityValue = severityFilter.value;
++      const ownerValue = ownerFilter.value;
++      const windowValue = windowFilter.value;
++      const statusValue = statusFilter.value;
++
++      const riskRows = document.querySelectorAll("tbody tr[data-severity]");
++      const policyRows = document.querySelectorAll("tbody tr[data-status]");
++      const milestoneItems = document.querySelectorAll("#milestoneList .timeline-item");
++
++      let visibleCount = 0;
++
++      riskRows.forEach((row) => {
++        const matchesSeverity = severityValue === "all" || row.dataset.severity === severityValue;
++        const matchesOwner = ownerValue === "all" || row.dataset.owner === ownerValue;
++        const isVisible = matchesSeverity && matchesOwner;
++        row.style.display = isVisible ? "" : "none";
++        if (isVisible) {
++          visibleCount += 1;
++        }
++      });
++
++      policyRows.forEach((row) => {
++        const matchesStatus = statusValue === "all" || row.dataset.status === statusValue;
++        const matchesOwner = ownerValue === "all" || row.dataset.owner === ownerValue;
++        const isVisible = matchesStatus && matchesOwner;
++        row.style.display = isVisible ? "" : "none";
++        if (isVisible) {
++          visibleCount += 1;
++        }
++      });
++
++      milestoneItems.forEach((item) => {
++        const windowMatch =
++          windowValue === "all" || Number(item.dataset.window) <= Number(windowValue);
++        item.style.display = windowMatch ? "" : "none";
++        if (windowMatch) {
++          visibleCount += 1;
++        }
++      });
++
++      filterSummary.innerHTML = `Showing <strong>${visibleCount}</strong> items across the dashboard.`;
++    };
++
++    [severityFilter, ownerFilter, windowFilter, statusFilter].forEach((filter) => {
++      filter.addEventListener("change", applyFilters);
++    });
++
++    applyFilters();
++  </script>
 +</body>
 +</html>
