@@ -1,9 +1,9 @@
 diff --git a/index.html b/index.html
 new file mode 100644
-index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d56fee65aa
+index 0000000000000000000000000000000000000000..bb22d06b02c6f17068225a9c82c9277184e19c11
 --- /dev/null
 +++ b/index.html
-@@ -0,0 +1,808 @@
+@@ -0,0 +1,1275 @@
 +<!DOCTYPE html>
 +<html lang="en">
 +<head>
@@ -26,6 +26,10 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      --danger: #dc2626;
 +      --purple: #7c3aed;
 +      --teal: #0f766e;
++      --sunset: #f97316;
++      --rose: #f43f5e;
++      --sky: #38bdf8;
++      --lime: #84cc16;
 +      --border: #e2e8f0;
 +      font-family: "Inter", system-ui, -apple-system, sans-serif;
 +    }
@@ -90,6 +94,10 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      gap: 16px;
 +    }
 +
++    .grid.two {
++      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
++    }
++
 +    .card {
 +      background: var(--card);
 +      border: 1px solid var(--border);
@@ -137,6 +145,11 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +    .status.danger {
 +      background: rgba(220, 38, 38, 0.12);
 +      color: var(--danger);
++    }
++
++    .status.info {
++      background: rgba(37, 99, 235, 0.12);
++      color: var(--accent-strong);
 +    }
 +
 +    .layout {
@@ -194,6 +207,51 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      color: var(--ink);
 +    }
 +
++    .mission {
++      display: grid;
++      gap: 16px;
++    }
++
++    .mission strong {
++      font-size: 16px;
++    }
++
++    .mission p {
++      margin: 0;
++      color: var(--muted);
++    }
++
++    .tension-meter {
++      display: grid;
++      gap: 8px;
++    }
++
++    .tension-bar {
++      position: relative;
++      height: 12px;
++      border-radius: 999px;
++      background: linear-gradient(90deg, var(--accent), var(--warning), var(--danger));
++    }
++
++    .tension-indicator {
++      position: absolute;
++      top: -6px;
++      width: 16px;
++      height: 24px;
++      border-radius: 8px;
++      background: #fff;
++      border: 2px solid var(--ink);
++      left: 62%;
++      box-shadow: 0 6px 12px rgba(15, 23, 42, 0.2);
++    }
++
++    .tension-labels {
++      display: flex;
++      justify-content: space-between;
++      font-size: 12px;
++      color: var(--muted);
++    }
++
 +    .section-title {
 +      display: flex;
 +      justify-content: space-between;
@@ -230,6 +288,11 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      letter-spacing: 0.04em;
 +    }
 +
++    .raci td:last-child {
++      font-weight: 600;
++      color: var(--accent-strong);
++    }
++
 +    .risk-bar {
 +      height: 8px;
 +      background: #eef2ff;
@@ -241,6 +304,68 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      display: block;
 +      height: 100%;
 +      background: linear-gradient(90deg, #38bdf8, #6366f1);
++    }
++
++    .matrix {
++      display: grid;
++      grid-template-columns: repeat(3, 1fr);
++      gap: 8px;
++      margin-top: 12px;
++    }
++
++    .matrix div {
++      padding: 10px;
++      border-radius: 10px;
++      font-size: 12px;
++      color: #fff;
++      text-align: center;
++      font-weight: 600;
++    }
++
++    .matrix .low {
++      background: linear-gradient(135deg, #22c55e, #16a34a);
++    }
++
++    .matrix .med {
++      background: linear-gradient(135deg, #f97316, #f59e0b);
++    }
++
++    .matrix .high {
++      background: linear-gradient(135deg, #f43f5e, #dc2626);
++    }
++
++    .guardrails {
++      display: grid;
++      gap: 12px;
++    }
++
++    .guardrail-list {
++      display: grid;
++      gap: 10px;
++    }
++
++    .guardrail-item {
++      display: flex;
++      align-items: center;
++      gap: 10px;
++      padding: 10px;
++      border-radius: 10px;
++      border: 1px solid var(--border);
++      background: #fbfdff;
++      font-size: 13px;
++    }
++
++    .guardrail-item input {
++      accent-color: var(--accent-strong);
++    }
++
++    .stop-list {
++      display: grid;
++      gap: 8px;
++      margin: 0;
++      padding-left: 18px;
++      color: var(--muted);
++      font-size: 13px;
 +    }
 +
 +    .timeline {
@@ -285,6 +410,51 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +    .summary-item span {
 +      font-size: 13px;
 +      color: var(--muted);
++    }
++
++    .metric-grid {
++      display: grid;
++      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
++      gap: 12px;
++    }
++
++    .metric-card {
++      padding: 14px;
++      border-radius: 12px;
++      border: 1px solid var(--border);
++      background: #fff;
++      display: grid;
++      gap: 6px;
++    }
++
++    .metric-card span {
++      font-size: 12px;
++      color: var(--muted);
++    }
++
++    .metric-card strong {
++      font-size: 20px;
++    }
++
++    .metric-card .trend {
++      font-size: 12px;
++      font-weight: 600;
++    }
++
++    .metric-card.blue {
++      background: linear-gradient(135deg, #eff6ff, #ffffff);
++    }
++
++    .metric-card.purple {
++      background: linear-gradient(135deg, #f5f3ff, #ffffff);
++    }
++
++    .metric-card.teal {
++      background: linear-gradient(135deg, #ecfeff, #ffffff);
++    }
++
++    .metric-card.rose {
++      background: linear-gradient(135deg, #fff1f2, #ffffff);
 +    }
 +
 +    .chart {
@@ -362,6 +532,33 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      display: inline-block;
 +    }
 +
++    .incident-timeline {
++      display: grid;
++      gap: 12px;
++    }
++
++    .incident-step {
++      padding: 12px;
++      border-radius: 12px;
++      border: 1px solid var(--border);
++      background: #ffffff;
++      display: grid;
++      gap: 6px;
++    }
++
++    .incident-step strong {
++      font-size: 14px;
++    }
++
++    .incident-step span {
++      font-size: 12px;
++      color: var(--muted);
++    }
++
++    .notify-table td {
++      font-size: 12px;
++    }
++
 +    footer {
 +      margin-top: 24px;
 +      color: var(--muted);
@@ -371,6 +568,11 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +    @media (max-width: 900px) {
 +      .layout {
 +        grid-template-columns: 1fr;
++      }
++
++      .chart-row {
++        grid-template-columns: 1fr;
++        gap: 6px;
 +      }
 +    }
 +  </style>
@@ -447,6 +649,136 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +      <div id="filterSummary" class="filter-summary">Showing <strong>all</strong> items.</div>
 +    </section>
 +
++    <section class="grid two" style="margin-top: 16px;">
++      <div class="card mission">
++        <div class="section-title">
++          <h2>Mission & Mandate</h2>
++          <span>North star + success criteria</span>
++        </div>
++        <strong>Advance frontier AI safely, transparently, and in service of broad societal benefit.</strong>
++        <p>
++          Success means measurable reduction in harmful outcomes, clear accountability for releases,
++          and sustained innovation velocity aligned with public trust.
++        </p>
++        <div class="tension-meter">
++          <div class="tension-bar">
++            <div class="tension-indicator" title="Current balance"></div>
++          </div>
++          <div class="tension-labels">
++            <span>Innovation speed</span>
++            <span>Safety & oversight</span>
++          </div>
++        </div>
++      </div>
++      <div class="card">
++        <div class="section-title">
++          <h2>Decision Rights Map</h2>
++          <span>RACI overview</span>
++        </div>
++        <table class="raci">
++          <thead>
++            <tr>
++              <th>Decision</th>
++              <th>R</th>
++              <th>A</th>
++              <th>C</th>
++              <th>I</th>
++            </tr>
++          </thead>
++          <tbody>
++            <tr>
++              <td>Model training</td>
++              <td>Research</td>
++              <td>CTO</td>
++              <td>Safety, Infra</td>
++              <td>Board</td>
++            </tr>
++            <tr>
++              <td>Deployment approval</td>
++              <td>Safety</td>
++              <td>CEO</td>
++              <td>Legal, Policy</td>
++              <td>Comms</td>
++            </tr>
++            <tr>
++              <td>Safety policy updates</td>
++              <td>Policy</td>
++              <td>Safety Council</td>
++              <td>Research, Legal</td>
++              <td>Board</td>
++            </tr>
++            <tr>
++              <td>Strategic partnerships</td>
++              <td>Strategy</td>
++              <td>CEO</td>
++              <td>Legal, Security</td>
++              <td>Finance</td>
++            </tr>
++            <tr>
++              <td>Incident disclosure</td>
++              <td>Legal</td>
++              <td>CEO</td>
++              <td>Security, Comms</td>
++              <td>Board</td>
++            </tr>
++          </tbody>
++        </table>
++      </div>
++    </section>
++
++    <section class="layout">
++      <div class="card guardrails">
++        <div class="section-title">
++          <h2>Controls & Guardrails</h2>
++          <span>Release gates & escalation triggers</span>
++        </div>
++        <div class="guardrail-list">
++          <label class="guardrail-item">
++            <input type="checkbox" checked />
++            Model evals passed across critical domains
++          </label>
++          <label class="guardrail-item">
++            <input type="checkbox" checked />
++            Red-team coverage completed and documented
++          </label>
++          <label class="guardrail-item">
++            <input type="checkbox" />
++            Security review signed off (pending cloud threat model)
++          </label>
++          <label class="guardrail-item">
++            <input type="checkbox" checked />
++            Policy review & comms plan approved
++          </label>
++        </div>
++        <div>
++          <strong>Stop conditions & escalation thresholds</strong>
++          <ul class="stop-list">
++            <li>Any critical incident (P0) triggered during staging → immediate halt.</li>
++            <li>Eval failure rate exceeds 5% on high-risk benchmarks.</li>
++            <li>Material policy exceptions remain unresolved after 14 days.</li>
++            <li>Security severity ≥ High with no mitigation plan.</li>
++          </ul>
++        </div>
++      </div>
++      <div class="card">
++        <div class="section-title">
++          <h2>Risk Register (Top 6)</h2>
++          <span>Likelihood × Impact</span>
++        </div>
++        <div class="matrix">
++          <div class="low">Low / Low</div>
++          <div class="med">Med / Low</div>
++          <div class="high">High / Low</div>
++          <div class="med">Low / Med</div>
++          <div class="high">Med / Med</div>
++          <div class="high">High / Med</div>
++          <div class="high">Low / High</div>
++          <div class="high">Med / High</div>
++          <div class="high">High / High</div>
++        </div>
++      </div>
++    </section>
++
 +    <section class="grid">
 +      <div class="card">
 +        <h3>Board Attendance</h3>
@@ -483,6 +815,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <th>Owner</th>
 +              <th>Likelihood</th>
 +              <th>Impact</th>
++              <th>Status</th>
++              <th>Next Review</th>
 +              <th>Residual</th>
 +            </tr>
 +          </thead>
@@ -492,6 +826,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Safety</td>
 +              <td>Medium</td>
 +              <td>High</td>
++              <td><span class="status warning">Mitigating</span></td>
++              <td>Aug 22</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 62%"></span></div>
 +              </td>
@@ -501,6 +837,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Legal</td>
 +              <td>High</td>
 +              <td>High</td>
++              <td><span class="status danger">Escalated</span></td>
++              <td>Aug 08</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 78%"></span></div>
 +              </td>
@@ -510,6 +848,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Infrastructure</td>
 +              <td>Medium</td>
 +              <td>Medium</td>
++              <td><span class="status info">Monitoring</span></td>
++              <td>Sep 01</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 48%"></span></div>
 +              </td>
@@ -519,6 +859,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Security</td>
 +              <td>Low</td>
 +              <td>High</td>
++              <td><span class="status warning">Remediation</span></td>
++              <td>Aug 15</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 36%"></span></div>
 +              </td>
@@ -528,6 +870,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Alignment</td>
 +              <td>Medium</td>
 +              <td>Medium</td>
++              <td><span class="status warning">Needs action</span></td>
++              <td>Aug 18</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 54%"></span></div>
 +              </td>
@@ -537,6 +881,8 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +              <td>Finance</td>
 +              <td>Low</td>
 +              <td>Medium</td>
++              <td><span class="status success">Stable</span></td>
++              <td>Sep 10</td>
 +              <td>
 +                <div class="risk-bar"><span style="width: 28%"></span></div>
 +              </td>
@@ -584,6 +930,59 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +    </section>
 +
 +    <section class="layout">
++      <div class="card">
++        <div class="section-title">
++          <h2>Metrics & Signals</h2>
++          <span>Leading indicators (mock)</span>
++        </div>
++        <div class="metric-grid">
++          <div class="metric-card blue">
++            <span>Eval failure rate</span>
++            <strong>3.4%</strong>
++            <div class="trend" style="color: var(--success);">▼ -0.6%</div>
++          </div>
++          <div class="metric-card rose">
++            <span>Critical incidents</span>
++            <strong>2</strong>
++            <div class="trend" style="color: var(--danger);">▲ +1</div>
++          </div>
++          <div class="metric-card teal">
++            <span>Time-to-mitigate</span>
++            <strong>4.8 days</strong>
++            <div class="trend" style="color: var(--warning);">▲ +0.9</div>
++          </div>
++          <div class="metric-card purple">
++            <span>Policy exceptions</span>
++            <strong>5</strong>
++            <div class="trend" style="color: var(--warning);">▲ +2</div>
++          </div>
++          <div class="metric-card blue">
++            <span>Security findings</span>
++            <strong>11</strong>
++            <div class="trend" style="color: var(--danger);">▲ +3</div>
++          </div>
++          <div class="metric-card teal">
++            <span>Model misuse reports</span>
++            <strong>7</strong>
++            <div class="trend" style="color: var(--warning);">▲ +1</div>
++          </div>
++          <div class="metric-card purple">
++            <span>Uptime</span>
++            <strong>99.93%</strong>
++            <div class="trend" style="color: var(--success);">▲ +0.04%</div>
++          </div>
++          <div class="metric-card rose">
++            <span>Dependency concentration</span>
++            <strong>44%</strong>
++            <div class="trend" style="color: var(--warning);">▼ -2%</div>
++          </div>
++          <div class="metric-card blue">
++            <span>Audit findings open</span>
++            <strong>6</strong>
++            <div class="trend" style="color: var(--warning);">▼ -1</div>
++          </div>
++        </div>
++      </div>
 +      <div class="card">
 +        <div class="section-title">
 +          <h2>Policy & Control Coverage</h2>
@@ -716,6 +1115,74 @@ index 0000000000000000000000000000000000000000..9611cf55483fdabbe3dd4026806bd6d5
 +            <div class="chart-value">87%</div>
 +          </div>
 +        </div>
++      </div>
++    </section>
++
++    <section class="layout">
++      <div class="card">
++        <div class="section-title">
++          <h2>Incidents & Escalation Timeline</h2>
++          <span>Detection → Postmortem</span>
++        </div>
++        <div class="incident-timeline">
++          <div class="incident-step">
++            <strong>Detection</strong>
++            <span>Signal capture via monitoring + user reports.</span>
++          </div>
++          <div class="incident-step">
++            <strong>Triage</strong>
++            <span>Severity classification within 2 hours.</span>
++          </div>
++          <div class="incident-step">
++            <strong>Mitigation</strong>
++            <span>Safety + infra response plan with owner assigned.</span>
++          </div>
++          <div class="incident-step">
++            <strong>Comms</strong>
++            <span>Stakeholder update cadence defined by severity.</span>
++          </div>
++          <div class="incident-step">
++            <strong>Postmortem</strong>
++            <span>Lessons learned + policy updates within 10 days.</span>
++          </div>
++        </div>
++      </div>
++      <div class="card">
++        <div class="section-title">
++          <h2>Notification Matrix</h2>
++          <span>Who is notified by severity</span>
++        </div>
++        <table class="notify-table">
++          <thead>
++            <tr>
++              <th>Severity</th>
++              <th>Notify within</th>
++              <th>Primary stakeholders</th>
++            </tr>
++          </thead>
++          <tbody>
++            <tr>
++              <td>P0 Critical</td>
++              <td>30 min</td>
++              <td>CEO, Board Chair, Legal, Safety</td>
++            </tr>
++            <tr>
++              <td>P1 High</td>
++              <td>2 hrs</td>
++              <td>Exec team, Security, Comms</td>
++            </tr>
++            <tr>
++              <td>P2 Medium</td>
++              <td>8 hrs</td>
++              <td>Product, Policy, Trust & Safety</td>
++            </tr>
++            <tr>
++              <td>P3 Low</td>
++              <td>24 hrs</td>
++              <td>Ops, Support, Compliance</td>
++            </tr>
++          </tbody>
++        </table>
 +      </div>
 +    </section>
 +
