@@ -1,0 +1,509 @@
+diff --git a/index.html b/index.html
+new file mode 100644
+index 0000000000000000000000000000000000000000..43e9ed3eac440074eabf239b3e554fcaad6aa806
+--- /dev/null
++++ b/index.html
+@@ -0,0 +1,503 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>OpenAI Governance Dashboard (Draft)</title>
++  <style>
++    :root {
++      color-scheme: light;
++      --bg: #f6f7fb;
++      --card: #ffffff;
++      --ink: #0f172a;
++      --muted: #5b6478;
++      --accent: #2563eb;
++      --accent-soft: #e0eaff;
++      --success: #16a34a;
++      --warning: #d97706;
++      --danger: #dc2626;
++      --border: #e2e8f0;
++      font-family: "Inter", system-ui, -apple-system, sans-serif;
++    }
++
++    * {
++      box-sizing: border-box;
++    }
++
++    body {
++      margin: 0;
++      background: var(--bg);
++      color: var(--ink);
++    }
++
++    .page {
++      max-width: 1200px;
++      margin: 0 auto;
++      padding: 32px 24px 48px;
++    }
++
++    header {
++      display: flex;
++      flex-direction: column;
++      gap: 12px;
++      margin-bottom: 24px;
++    }
++
++    header h1 {
++      font-size: 30px;
++      margin: 0;
++    }
++
++    header p {
++      margin: 0;
++      color: var(--muted);
++      max-width: 760px;
++    }
++
++    .meta-row {
++      display: flex;
++      flex-wrap: wrap;
++      gap: 12px;
++      margin-top: 8px;
++    }
++
++    .pill {
++      background: var(--accent-soft);
++      color: var(--accent);
++      padding: 6px 12px;
++      border-radius: 999px;
++      font-size: 13px;
++      font-weight: 600;
++    }
++
++    .grid {
++      display: grid;
++      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++      gap: 16px;
++    }
++
++    .card {
++      background: var(--card);
++      border: 1px solid var(--border);
++      border-radius: 16px;
++      padding: 18px;
++      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
++    }
++
++    .card h3 {
++      margin: 0 0 8px 0;
++      font-size: 16px;
++    }
++
++    .kpi {
++      font-size: 28px;
++      font-weight: 700;
++      margin: 4px 0;
++    }
++
++    .delta {
++      font-size: 13px;
++      color: var(--muted);
++    }
++
++    .status {
++      display: inline-flex;
++      align-items: center;
++      gap: 6px;
++      font-size: 12px;
++      font-weight: 600;
++      padding: 4px 8px;
++      border-radius: 999px;
++    }
++
++    .status.success {
++      background: rgba(22, 163, 74, 0.12);
++      color: var(--success);
++    }
++
++    .status.warning {
++      background: rgba(217, 119, 6, 0.12);
++      color: var(--warning);
++    }
++
++    .status.danger {
++      background: rgba(220, 38, 38, 0.12);
++      color: var(--danger);
++    }
++
++    .layout {
++      display: grid;
++      grid-template-columns: 2.2fr 1fr;
++      gap: 16px;
++      margin-top: 16px;
++    }
++
++    .section-title {
++      display: flex;
++      justify-content: space-between;
++      align-items: center;
++      margin-bottom: 12px;
++    }
++
++    .section-title h2 {
++      font-size: 18px;
++      margin: 0;
++    }
++
++    .section-title span {
++      color: var(--muted);
++      font-size: 12px;
++    }
++
++    table {
++      width: 100%;
++      border-collapse: collapse;
++      font-size: 13px;
++    }
++
++    th, td {
++      text-align: left;
++      padding: 10px 8px;
++      border-bottom: 1px solid var(--border);
++    }
++
++    th {
++      font-size: 12px;
++      color: var(--muted);
++      text-transform: uppercase;
++      letter-spacing: 0.04em;
++    }
++
++    .risk-bar {
++      height: 8px;
++      background: #eef2ff;
++      border-radius: 999px;
++      overflow: hidden;
++    }
++
++    .risk-bar span {
++      display: block;
++      height: 100%;
++      background: linear-gradient(90deg, #38bdf8, #6366f1);
++    }
++
++    .timeline {
++      display: grid;
++      gap: 12px;
++    }
++
++    .timeline-item {
++      display: grid;
++      gap: 6px;
++      padding: 12px;
++      border-radius: 12px;
++      border: 1px solid var(--border);
++      background: #fbfcff;
++    }
++
++    .timeline-item h4 {
++      margin: 0;
++      font-size: 14px;
++    }
++
++    .timeline-item p {
++      margin: 0;
++      font-size: 12px;
++      color: var(--muted);
++    }
++
++    .summary-list {
++      display: grid;
++      gap: 12px;
++    }
++
++    .summary-item {
++      display: flex;
++      justify-content: space-between;
++      align-items: center;
++      padding: 12px;
++      border: 1px solid var(--border);
++      border-radius: 12px;
++    }
++
++    .summary-item span {
++      font-size: 13px;
++      color: var(--muted);
++    }
++
++    footer {
++      margin-top: 24px;
++      color: var(--muted);
++      font-size: 12px;
++    }
++
++    @media (max-width: 900px) {
++      .layout {
++        grid-template-columns: 1fr;
++      }
++    }
++  </style>
++</head>
++<body>
++  <div class="page">
++    <header>
++      <h1>OpenAI Governance Dashboard (Draft)</h1>
++      <p>
++        Early-stage governance view with mock data representing board oversight, policy compliance,
++        safety risk signals, and upcoming decision points. Data below is fictitious but modeled on
++        real governance artifacts.
++      </p>
++      <div class="meta-row">
++        <span class="pill">Reporting Period: Q3 2024</span>
++        <span class="pill">Prepared by: Governance Office</span>
++        <span class="pill">Board Packet v0.3</span>
++      </div>
++    </header>
++
++    <section class="grid">
++      <div class="card">
++        <h3>Board Attendance</h3>
++        <div class="kpi">94%</div>
++        <div class="delta">+2% vs last quarter (avg 11.3/12 seats filled)</div>
++      </div>
++      <div class="card">
++        <h3>Policy Compliance</h3>
++        <div class="kpi">88%</div>
++        <div class="delta">3 policies pending review this cycle</div>
++      </div>
++      <div class="card">
++        <h3>Safety Review Backlog</h3>
++        <div class="kpi">7 items</div>
++        <div class="delta">Median review time 13 days</div>
++      </div>
++      <div class="card">
++        <h3>External Audits</h3>
++        <div class="kpi">4 active</div>
++        <div class="delta">2 in remediation, 1 closing this month</div>
++      </div>
++    </section>
++
++    <section class="layout">
++      <div class="card">
++        <div class="section-title">
++          <h2>Risk Register Snapshot</h2>
++          <span>Top 6 enterprise risks (mock)</span>
++        </div>
++        <table>
++          <thead>
++            <tr>
++              <th>Risk</th>
++              <th>Owner</th>
++              <th>Likelihood</th>
++              <th>Impact</th>
++              <th>Residual</th>
++            </tr>
++          </thead>
++          <tbody>
++            <tr>
++              <td>Frontier model misuse</td>
++              <td>Safety</td>
++              <td>Medium</td>
++              <td>High</td>
++              <td>
++                <div class="risk-bar"><span style="width: 62%"></span></div>
++              </td>
++            </tr>
++            <tr>
++              <td>Regulatory divergence (EU/US)</td>
++              <td>Legal</td>
++              <td>High</td>
++              <td>High</td>
++              <td>
++                <div class="risk-bar"><span style="width: 78%"></span></div>
++              </td>
++            </tr>
++            <tr>
++              <td>Compute supply constraints</td>
++              <td>Infrastructure</td>
++              <td>Medium</td>
++              <td>Medium</td>
++              <td>
++                <div class="risk-bar"><span style="width: 48%"></span></div>
++              </td>
++            </tr>
++            <tr>
++              <td>Data governance gaps</td>
++              <td>Security</td>
++              <td>Low</td>
++              <td>High</td>
++              <td>
++                <div class="risk-bar"><span style="width: 36%"></span></div>
++              </td>
++            </tr>
++            <tr>
++              <td>Model eval coverage</td>
++              <td>Alignment</td>
++              <td>Medium</td>
++              <td>Medium</td>
++              <td>
++                <div class="risk-bar"><span style="width: 54%"></span></div>
++              </td>
++            </tr>
++            <tr>
++              <td>Vendor concentration</td>
++              <td>Finance</td>
++              <td>Low</td>
++              <td>Medium</td>
++              <td>
++                <div class="risk-bar"><span style="width: 28%"></span></div>
++              </td>
++            </tr>
++          </tbody>
++        </table>
++      </div>
++
++      <div class="card">
++        <div class="section-title">
++          <h2>Governance Health</h2>
++          <span>Signals & alerts</span>
++        </div>
++        <div class="summary-list">
++          <div class="summary-item">
++            <div>
++              <strong>Charter compliance</strong><br />
++              <span>All committees reporting on time</span>
++            </div>
++            <span class="status success">On track</span>
++          </div>
++          <div class="summary-item">
++            <div>
++              <strong>Safety gate readiness</strong><br />
++              <span>2 models awaiting post-training evals</span>
++            </div>
++            <span class="status warning">Watch</span>
++          </div>
++          <div class="summary-item">
++            <div>
++              <strong>Incident response drills</strong><br />
++              <span>Next tabletop scheduled Aug 12</span>
++            </div>
++            <span class="status success">Scheduled</span>
++          </div>
++          <div class="summary-item">
++            <div>
++              <strong>Ethics hotline</strong><br />
++              <span>3 cases open; 1 in escalation</span>
++            </div>
++            <span class="status danger">Escalate</span>
++          </div>
++        </div>
++      </div>
++    </section>
++
++    <section class="layout">
++      <div class="card">
++        <div class="section-title">
++          <h2>Policy & Control Coverage</h2>
++          <span>Critical policies (mock)</span>
++        </div>
++        <table>
++          <thead>
++            <tr>
++              <th>Policy</th>
++              <th>Last Review</th>
++              <th>Owner</th>
++              <th>Status</th>
++            </tr>
++          </thead>
++          <tbody>
++            <tr>
++              <td>Model Release Governance</td>
++              <td>Jul 15, 2024</td>
++              <td>Safety Council</td>
++              <td><span class="status success">Approved</span></td>
++            </tr>
++            <tr>
++              <td>Data Use & Retention</td>
++              <td>Jun 30, 2024</td>
++              <td>Privacy Office</td>
++              <td><span class="status warning">Revisions due</span></td>
++            </tr>
++            <tr>
++              <td>Red-Team Operations</td>
++              <td>May 12, 2024</td>
++              <td>Security</td>
++              <td><span class="status success">Approved</span></td>
++            </tr>
++            <tr>
++              <td>Third-Party Risk Management</td>
++              <td>Apr 18, 2024</td>
++              <td>Procurement</td>
++              <td><span class="status warning">Audit findings</span></td>
++            </tr>
++            <tr>
++              <td>Incident Disclosure</td>
++              <td>Mar 03, 2024</td>
++              <td>Legal</td>
++              <td><span class="status danger">Overdue</span></td>
++            </tr>
++          </tbody>
++        </table>
++      </div>
++
++      <div class="card">
++        <div class="section-title">
++          <h2>Upcoming Governance Milestones</h2>
++          <span>Next 30 days</span>
++        </div>
++        <div class="timeline">
++          <div class="timeline-item">
++            <h4>Safety Board Review: Model Atlas v2</h4>
++            <p>Aug 05 · Decision on phased deployment readiness</p>
++          </div>
++          <div class="timeline-item">
++            <h4>External Audit Closeout</h4>
++            <p>Aug 12 · SOC 2 remediation evidence submission</p>
++          </div>
++          <div class="timeline-item">
++            <h4>Governance Charter Refresh</h4>
++            <p>Aug 20 · Committee scope update & vote</p>
++          </div>
++          <div class="timeline-item">
++            <h4>Policy Review Sprint</h4>
++            <p>Aug 28 · Cross-functional review of data governance</p>
++          </div>
++        </div>
++      </div>
++    </section>
++
++    <section class="card" style="margin-top: 16px;">
++      <div class="section-title">
++        <h2>Committee Briefs</h2>
++        <span>Latest signals per committee</span>
++      </div>
++      <div class="grid">
++        <div class="card" style="box-shadow: none;">
++          <h3>Safety & Alignment Committee</h3>
++          <p class="delta">3 high-priority eval gaps identified; mitigation plans approved.</p>
++          <span class="status warning">Needs follow-up</span>
++        </div>
++        <div class="card" style="box-shadow: none;">
++          <h3>Audit & Risk Committee</h3>
++          <p class="delta">Quarterly audit trend stable; vendor risk review underway.</p>
++          <span class="status success">On track</span>
++        </div>
++        <div class="card" style="box-shadow: none;">
++          <h3>Ethics & Policy Committee</h3>
++          <p class="delta">Ethics hotline spike traced to new reporting channel rollout.</p>
++          <span class="status danger">Escalate</span>
++        </div>
++        <div class="card" style="box-shadow: none;">
++          <h3>Strategy Committee</h3>
++          <p class="delta">Evaluating partnership oversight framework for FY25.</p>
++          <span class="status warning">In review</span>
++        </div>
++      </div>
++    </section>
++
++    <footer>
++      Draft dashboard. All data is synthetic and for demonstration only.
++    </footer>
++  </div>
++</body>
++</html>
